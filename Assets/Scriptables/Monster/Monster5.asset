@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 435a48abc0536c74d99286f9437c3624, type: 3}
+  m_Name: Monster5
+  m_EditorClassIdentifier: 
+  name: Vampire
+  portrait: {fileID: -1341673583, guid: b3b85ee1ee802854785bbabc13dfebb6, type: 3}
