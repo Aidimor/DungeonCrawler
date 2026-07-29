@@ -1,9 +1,8 @@
 using UnityEngine;
 
-public class MainController : MonoBehaviour
+public class PlayerMovementScript : MonoBehaviour
 {
-    public Color _mainColor;
-    
+  
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -15,4 +14,6 @@ public class MainController : MonoBehaviour
     {
         
     }
+
+    
 }
