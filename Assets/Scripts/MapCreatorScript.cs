@@ -1,10 +1,14 @@
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class MapCreatorScript : MonoBehaviour
 {
     [Header("Map Assets")]
     public GameObject[] _mapAssets;
+
+    [Header("Map Scriptables")]
+    public Map[] _mapScriptables;
 
     [Header("Grid")]
     public int _gridWidth = 7;
@@ -17,11 +21,10 @@ public class MapCreatorScript : MonoBehaviour
     [Header("Direction Settings")]
     public float _directionSeparation = 1.5f;
 
-    [Header("Map Layout")]
-    public List<MapCell> _mapGrid = new List<MapCell>();
-
     [Header("Spawned Maps")]
     public List<GameObject> _allSpawnedMaps = new List<GameObject>();
+
+    public List<Transform> _allMovementOrbs;
 
     private void Start()
     {
@@ -30,21 +33,37 @@ public class MapCreatorScript : MonoBehaviour
 
     public void CreateGrid()
     {
-        _mapGrid.Clear();
-
-        for (int z = 0; z < _gridHeight; z++)
+        if (_mapScriptables == null || _mapScriptables.Length == 0)
         {
-            for (int x = 0; x < _gridWidth; x++)
+            Debug.LogWarning("No hay Map Scriptables asignados.");
+            return;
+        }
+
+        for (int i = 0; i < _mapScriptables.Length; i++)
+        {
+            if (_mapScriptables[i] == null)
+                continue;
+
+            _mapScriptables[i]._mapGrid.Clear();
+
+            for (int z = 0; z < _gridHeight; z++)
             {
-                MapCell cell = new MapCell();
+                for (int x = 0; x < _gridWidth; x++)
+                {
+                    MapCell cell = new MapCell();
 
-                cell.x = x;
-                cell.z = z;
-                cell.mapID = -1;
-                cell.directionID = 0;
+                    cell.x = x;
+                    cell.z = z;
+                    cell.mapID = -1;
+                    cell.directionID = 0;
 
-                _mapGrid.Add(cell);
+                    // IMPORTANTE:
+                    // Antes tenías [0], ahora usamos [i]
+                    _mapScriptables[i]._mapGrid.Add(cell);
+                }
             }
+
+      
         }
     }
 
@@ -52,9 +71,9 @@ public class MapCreatorScript : MonoBehaviour
     {
         ClearSpawnedMaps();
 
-        if (_mapGrid.Count == 0)
+        if (_mapScriptables == null || _mapScriptables.Length == 0)
         {
-            Debug.LogWarning("La Grid está vacía.");
+            Debug.LogWarning("No hay Map Scriptables asignados.");
             return;
         }
 
@@ -64,71 +83,122 @@ public class MapCreatorScript : MonoBehaviour
             return;
         }
 
-        foreach (MapCell cell in _mapGrid)
+
+
+        for (int i = 0; i < _mapScriptables.Length; i++)
         {
-            if (cell.mapID < 0)
+            if (_mapScriptables[i] == null)
                 continue;
 
-            if (cell.mapID >= _mapAssets.Length)
+            if (_mapScriptables[i]._mapGrid.Count == 0)
             {
                 Debug.LogWarning(
-                    $"MapID {cell.mapID} no existe en _mapAssets."
+                    $"La Grid del Map Scriptable {i} está vacía."
                 );
 
                 continue;
             }
 
-            // ================================================
-            // POSICIÓN BASE
-            // ================================================
 
-            Vector3 spawnPosition = _startPos + new Vector3(
-                cell.x * _separation,
-                0f,
-                cell.z * _separation
-            );
 
-            // ================================================
-            // OFFSET SEGÚN ORIENTACIÓN
-            // ================================================
-
-            switch (cell.directionID)
+            foreach (MapCell cell in _mapScriptables[i]._mapGrid)
             {
-                // 0 = Horizontal
-                case 0:
-                    break;
+                if (cell.mapID < 0)
+                    continue;
 
-                // 1 = Vertical
-                case 1:
-                    spawnPosition.x += _directionSeparation;
-                    break;
-
-                default:
+                if (cell.mapID >= _mapAssets.Length)
+                {
                     Debug.LogWarning(
-                        $"Direction ID {cell.directionID} no válido en X:{cell.x} Z:{cell.z}."
+                        $"MapID {cell.mapID} no existe en _mapAssets."
                     );
-                    break;
+
+                    continue;
+                }
+
+                // ================================================
+                // POSICIÓN BASE
+                // ================================================
+
+                Vector3 spawnPosition = _startPos + new Vector3(
+                    cell.x * _separation,
+                    0f,
+                    cell.z * _separation
+                );
+
+                // ================================================
+                // OFFSET SEGÚN ORIENTACIÓN
+                // ================================================
+
+                switch (cell.directionID)
+                {
+                    // 0 = Horizontal
+                    case 0:
+                        break;
+
+                    // 1 = Vertical
+                    case 1:
+                        spawnPosition.x += _directionSeparation;
+                        break;
+
+                    default:
+                        Debug.LogWarning(
+                            $"Direction ID {cell.directionID} no válido en X:{cell.x} Z:{cell.z}."
+                        );
+                        break;
+                }
+
+                // ================================================
+                // ROTACIÓN
+                // ================================================
+
+                Quaternion spawnRotation = GetRotation(cell.directionID);
+
+                // ================================================
+                // CREAR MAPA
+                // ================================================
+
+                GameObject map = Instantiate(
+                    _mapAssets[cell.mapID],
+                    spawnPosition,
+                    spawnRotation
+                );
+
+                map.transform.parent = transform;
+
+                _allSpawnedMaps.Add(map);
+
+                float _beaconPositionTolerance = 0.5f;
+
+                MapBeacons beacons = map.GetComponent<MapBeacons>();
+
+                foreach (Transform beacon in beacons._posBeacons)
+                {
+                    bool alreadyExists = false;
+
+                    foreach (Transform existingBeacon in _allMovementOrbs)
+                    {
+                        float distance = Vector3.Distance(
+                            beacon.position,
+                            existingBeacon.position
+                        );
+
+                        // Ya existe un beacon prácticamente en la misma posición
+                        if (distance <= _beaconPositionTolerance)
+                        {
+                            alreadyExists = true;
+                            break;
+                        }
+                    }
+
+                    // Solo agregar si no existe uno en esa posición
+                    if (!alreadyExists)
+                    {
+                        _allMovementOrbs.Add(beacon);
+                    }
+                }
             }
 
-            // ================================================
-            // ROTACIÓN
-            // ================================================
 
-            Quaternion spawnRotation = GetRotation(cell.directionID);
-
-            // ================================================
-            // CREAR MAPA
-            // ================================================
-
-            GameObject map = Instantiate(
-                _mapAssets[cell.mapID],
-                spawnPosition,
-                spawnRotation
-            );
-
-            map.transform.parent = transform;
-
-            _allSpawnedMaps.Add(map);
         }
     }
 
@@ -164,10 +234,28 @@ public class MapCreatorScript : MonoBehaviour
 
     public MapCell GetCell(int x, int z)
     {
-        return _mapGrid.Find(cell =>
-            cell.x == x &&
-            cell.z == z
-        );
+        if (_mapScriptables == null || _mapScriptables.Length == 0)
+        {
+            return null;
+        }
+
+        for (int i = 0; i < _mapScriptables.Length; i++)
+        {
+            if (_mapScriptables[i] == null)
+                continue;
+
+            MapCell cell = _mapScriptables[i]._mapGrid.Find(
+                cell => cell.x == x && cell.z == z
+            );
+
+            if (cell != null)
+            {
+                return cell;
+            }
+        }
+
+        // No se encontró ninguna celda
+        return null;
     }
 }
 
