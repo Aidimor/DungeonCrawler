@@ -1,4 +1,6 @@
+using NUnit.Framework;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MainController : MonoBehaviour
@@ -6,9 +8,24 @@ public class MainController : MonoBehaviour
     public static MainController Instance { get; private set; }
     public MapCreatorScript _mapScript;
     public PlayerMovementScript _scriptMovement;
+    public HeroController _scriptHero;
 
     public GameObject _playerParent;
     public Camera _mainCamera;
+
+    public int _heroID;
+
+    
+
+
+    [System.Serializable]
+    public class DungeonsMainInfo
+    {
+        public List<int> _DungeonIds = new List<int>();
+        public bool _random;
+        public int _total;
+    }
+    public DungeonsMainInfo[] _dungeonsMainInfo;
 
     void Awake()
     {
@@ -35,7 +52,13 @@ public class MainController : MonoBehaviour
     public IEnumerator GameStarts()
     {
         yield return new WaitForSeconds(0.25f);
-        _playerParent.transform.position = _mapScript._allMovementOrbs[0].transform.position;
+        _playerParent.transform.position = new Vector3(
+                _mapScript._allMovementOrbs[0].transform.position.x,
+                (_mapScript._allMovementOrbs[0].transform.position.y + (MainController.Instance._scriptHero._heroScriptable[MainController.Instance._heroID]._height / 2.5f)),
+                _mapScript._allMovementOrbs[0].transform.position.z);
+
+
+           
 
     }
  

@@ -105,9 +105,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af12f96ce0dbdde4e919f65c5d5f2d30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  _posBeacons:
-  - {fileID: 4359053230937007425}
-  - {fileID: 8207161683148190285}
+  _mainInfo:
+  - _posBeacons: {fileID: 4359053230937007425}
+    _changeDirections: 0
+  - _posBeacons: {fileID: 8207161683148190285}
+    _changeDirections: 0
 --- !u!1 &4195079554926110692
 GameObject:
   m_ObjectHideFlags: 0

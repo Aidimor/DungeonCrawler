@@ -2,7 +2,16 @@ using UnityEngine;
 
 public class MapBeacons : MonoBehaviour
 {
-    public Transform[] _posBeacons;
+    [System.Serializable]
+    public class MainInfo
+    {
+        public Transform _posBeacons;
+        public bool _changeDirections;
+    }
+    public MainInfo[] _mainInfo;
+
+    //public Transform[] _posBeacons;
+    //public bool[] _changeDirections;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
