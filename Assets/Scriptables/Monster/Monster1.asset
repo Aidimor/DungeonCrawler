@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Slime
   portrait: {fileID: 1274883676, guid: b3b85ee1ee802854785bbabc13dfebb6, type: 3}
+  _height: 0
+  _skills: 

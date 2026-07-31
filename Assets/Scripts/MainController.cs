@@ -23,9 +23,11 @@ public class MainController : MonoBehaviour
     {
         public List<int> _DungeonIds = new List<int>();
         public bool _random;
-        public int _total;
+  
     }
     public DungeonsMainInfo[] _dungeonsMainInfo;
+
+    public DungeonCard[] _allDungeonCards;
 
     void Awake()
     {
