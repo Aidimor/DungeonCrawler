@@ -57,9 +57,6 @@ public class MainController : MonoBehaviour
                 (_mapScript._allMovementOrbs[0].transform.position.y + (MainController.Instance._scriptHero._heroScriptable[MainController.Instance._heroID]._height / 2.5f)),
                 _mapScript._allMovementOrbs[0].transform.position.z);
 
-
-           
-
     }
  
 }

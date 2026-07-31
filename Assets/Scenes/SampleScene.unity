@@ -1211,12 +1211,9 @@ MonoBehaviour:
   _mainCamera: {fileID: 674857196}
   _heroID: 2
   _dungeonsMainInfo:
-  - _DungeonIds: 00000000
-    _random: 0
-    _total: 2
-  - _DungeonIds: 00000000
-    _random: 0
-    _total: 2
+  - _DungeonIds: 
+    _random: 1
+    _total: 7
 --- !u!4 &903786455
 Transform:
   m_ObjectHideFlags: 0
@@ -1269,6 +1266,8 @@ MonoBehaviour:
   _mapScriptables:
   - {fileID: 11400000, guid: 760009173d1db1044844841b914cd0a6, type: 2}
   - {fileID: 11400000, guid: 4d580dcd672dcba49b51ba00a050426a, type: 2}
+  - {fileID: 11400000, guid: cd7e27719060bc742925109980a00b18, type: 2}
+  - {fileID: 11400000, guid: e75a89f45fa4c574eace9eda2542c233, type: 2}
   _gridWidth: 7
   _gridHeight: 7
   _startPos: {x: 0, y: 0, z: 0}
@@ -1277,7 +1276,8 @@ MonoBehaviour:
   _allSpawnedMaps: []
   _allMovementOrbs: []
   _allChangeDirections: 
-  _beaconTolerance: 2
+  _allCanStop: 
+  _beaconTolerance: 0.5
 --- !u!4 &933061411
 Transform:
   m_ObjectHideFlags: 0
@@ -1435,7 +1435,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1281397008
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1917,7 +1917,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1649396024
 RectTransform:
   m_ObjectHideFlags: 0

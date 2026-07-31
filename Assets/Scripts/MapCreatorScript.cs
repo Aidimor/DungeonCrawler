@@ -26,6 +26,7 @@ public class MapCreatorScript : MonoBehaviour
 
     public List<Transform> _allMovementOrbs;
     public List<bool> _allChangeDirections;
+    public List<bool> _allCanStop = new List<bool>();
 
     public float _beaconTolerance;
 
@@ -45,7 +46,7 @@ public class MapCreatorScript : MonoBehaviour
             {
                 for (int y = 0; y < MainScript._dungeonsMainInfo[i]._total; y++)
                 {
-                    MainScript._dungeonsMainInfo[i]._DungeonIds.Add(Random.Range(0, 2));
+                    MainScript._dungeonsMainInfo[i]._DungeonIds.Add(Random.Range(0, _mapScriptables.Length));
                 }
             }
         
@@ -88,6 +89,7 @@ public class MapCreatorScript : MonoBehaviour
         }
     }
 
+
     //public void MapCreatorVoid()
     //{
     //    ClearSpawnedMaps();
@@ -104,111 +106,201 @@ public class MapCreatorScript : MonoBehaviour
     //        return;
     //    }
 
-
-
-    //    for (int i = 0; i < _mapScriptables.Length; i++)
+    //    if (MainController.Instance == null)
     //    {
-    //        if (_mapScriptables[i] == null)
-    //            continue;
+    //        Debug.LogWarning("MainController no existe.");
+    //        return;
+    //    }
 
-    //        if (_mapScriptables[i]._mapGrid.Count == 0)
+    //    if (MainController.Instance._dungeonsMainInfo == null ||
+    //        MainController.Instance._dungeonsMainInfo.Length == 0)
+    //    {
+    //        Debug.LogWarning("No hay DungeonsMainInfo.");
+    //        return;
+    //    }
+
+    //    List<int> dungeonOrder =
+    //        MainController.Instance._dungeonsMainInfo[0]._DungeonIds;
+
+
+    //    if (dungeonOrder == null || dungeonOrder.Count == 0)
+    //    {
+    //        Debug.LogWarning("La lista de DungeonIds está vacía.");
+    //        return;
+    //    }
+
+
+    //    //================================================
+    //    // PUNTO INICIAL DEL PRIMER SET
+    //    //================================================
+
+    //    Vector3 nextSetStart = _startPos;
+    //    Quaternion nextSetRotation = Quaternion.identity;
+
+
+
+    //    //================================================
+    //    // CREAR MAPAS
+    //    //================================================
+
+    //    for (int i = 0; i < dungeonOrder.Count; i++)
+    //    {
+    //        int mapIndex = dungeonOrder[i];
+
+
+    //        if (mapIndex < 0 || mapIndex >= _mapScriptables.Length)
     //        {
-    //            Debug.LogWarning(
-    //                $"La Grid del Map Scriptable {i} está vacía."
-    //            );
+    //            Debug.LogWarning($"Map Scriptable {mapIndex} no existe.");
+    //            continue;
+    //        }
 
+
+    //        Map currentMap = _mapScriptables[mapIndex];
+
+
+    //        if (currentMap == null)
+    //        {
+    //            Debug.LogWarning($"Map Scriptable {mapIndex} es NULL.");
+    //            continue;
+    //        }
+
+
+    //        if (currentMap._mapGrid == null ||
+    //            currentMap._mapGrid.Count == 0)
+    //        {
+    //            Debug.LogWarning($"Grid vacía en Map {mapIndex}");
     //            continue;
     //        }
 
 
 
-    //        foreach (MapCell cell in _mapScriptables[i]._mapGrid)
+    //        //================================================
+    //        // CREAR PADRE DEL SET
+    //        //================================================
+
+    //        GameObject setParent = new GameObject($"Map Set {i}");
+
+    //        setParent.transform.SetParent(transform);
+
+    //        setParent.transform.position = nextSetStart;
+    //        setParent.transform.rotation = nextSetRotation;
+    //        setParent.transform.localScale = Vector3.one;
+
+
+
+    //        MapBeacons firstMapBeacons = null;
+    //        MapBeacons lastMapBeacons = null;
+
+
+
+    //        foreach (MapCell cell in currentMap._mapGrid)
     //        {
+
     //            if (cell.mapID < 0)
     //                continue;
+
 
     //            if (cell.mapID >= _mapAssets.Length)
     //            {
     //                Debug.LogWarning(
-    //                    $"MapID {cell.mapID} no existe en _mapAssets."
+    //                    $"MapID {cell.mapID} no existe."
     //                );
 
     //                continue;
     //            }
 
-    //            // ================================================
-    //            // POSICIÓN BASE
-    //            // ================================================
 
-    //            Vector3 spawnPosition = _startPos + new Vector3(
+
+    //            //================================================
+    //            // POSICION LOCAL DEL FRAGMENTO
+    //            //================================================
+
+    //            Vector3 localPosition = new Vector3(
     //                cell.x * _separation,
     //                0f,
     //                cell.z * _separation
     //            );
 
-    //            // ================================================
-    //            // OFFSET SEGÚN ORIENTACIÓN
-    //            // ================================================
 
-    //            switch (cell.directionID)
-    //            {
-    //                // 0 = Horizontal
-    //                case 0:
-    //                    break;
+    //            Vector3 spawnPosition =
+    //                nextSetStart +
+    //                (nextSetRotation * localPosition);
 
-    //                // 1 = Vertical
-    //                case 1:
-    //                    spawnPosition.x += _directionSeparation;
-    //                    break;
 
-    //                default:
-    //                    Debug.LogWarning(
-    //                        $"Direction ID {cell.directionID} no válido en X:{cell.x} Z:{cell.z}."
-    //                    );
-    //                    break;
-    //            }
 
-    //            // ================================================
-    //            // ROTACIÓN
-    //            // ================================================
+    //            //================================================
+    //            // ROTACION
+    //            //================================================
 
-    //            Quaternion spawnRotation = GetRotation(cell.directionID);
+    //            Quaternion spawnRotation =
+    //                nextSetRotation *
+    //                GetRotation(cell.directionID);
 
-    //            // ================================================
-    //            // CREAR MAPA
-    //            // ================================================
+
+
+    //            //================================================
+    //            // CREAR FRAGMENTO
+    //            //================================================
 
     //            GameObject map = Instantiate(
     //                _mapAssets[cell.mapID],
     //                spawnPosition,
-    //                spawnRotation
+    //                spawnRotation,
+    //                setParent.transform
     //            );
 
-    //            map.transform.parent = transform;
 
     //            _allSpawnedMaps.Add(map);
 
-    //            //float _beaconPositionTolerance = 1f;
 
-    //            MapBeacons beacons = map.GetComponent<MapBeacons>();
+
+    //            MapBeacons beacons =
+    //                map.GetComponent<MapBeacons>();
+
+
+    //            if (beacons == null)
+    //                continue;
+
+
+
+    //            // Guardar primer y ultimo fragmento
+
+    //            if (firstMapBeacons == null)
+    //            {
+    //                firstMapBeacons = beacons;
+    //            }
+
+
+    //            lastMapBeacons = beacons;
+
+
 
     //            foreach (MapBeacons.MainInfo info in beacons._mainInfo)
     //            {
     //                if (info._posBeacons == null)
     //                    continue;
 
+
+
     //                Transform beacon = info._posBeacons;
+
 
     //                bool alreadyExists = false;
 
+
     //                foreach (Transform existingBeacon in _allMovementOrbs)
     //                {
-    //                    if (Vector3.Distance(beacon.position, existingBeacon.position) <= _beaconTolerance)
+    //                    if (Vector3.Distance(
+    //                        beacon.position,
+    //                        existingBeacon.position)
+    //                        <= _beaconTolerance)
     //                    {
     //                        alreadyExists = true;
     //                        break;
     //                    }
     //                }
+
+
 
     //                if (!alreadyExists)
     //                {
@@ -219,7 +311,43 @@ public class MapCreatorScript : MonoBehaviour
     //        }
 
 
+
+    //        //================================================
+    //        // ALINEAR EL START BEACON DEL NUEVO SET
+    //        // CON EL END BEACON ANTERIOR
+    //        //================================================
+
+    //        if (i > 0 &&
+    //            firstMapBeacons != null &&
+    //            firstMapBeacons._startBeacon != null)
+    //        {
+
+    //            Vector3 offset =
+    //                nextSetStart -
+    //                firstMapBeacons._startBeacon.position;
+
+
+    //            setParent.transform.position += offset;
     //        }
+
+
+
+    //        //================================================
+    //        // GUARDAR EL END DEL SET ACTUAL
+    //        //================================================
+
+    //        if (lastMapBeacons != null &&
+    //            lastMapBeacons._endBeacon != null)
+    //        {
+
+    //            nextSetStart =
+    //                lastMapBeacons._endBeacon.position;
+
+
+    //            nextSetRotation =
+    //                lastMapBeacons._endBeacon.rotation;
+    //        }
+    //    }
     //}
 
     public void MapCreatorVoid()
@@ -228,6 +356,14 @@ public class MapCreatorScript : MonoBehaviour
 
         _allMovementOrbs.Clear();
         _allChangeDirections.Clear();
+        _allCanStop.Clear();
+
+
+        if (_mapScriptables == null || _mapScriptables.Length == 0)
+        {
+            Debug.LogWarning("No hay Map Scriptables asignados.");
+            return;
+        }
 
         if (_mapAssets == null || _mapAssets.Length == 0)
         {
@@ -235,97 +371,208 @@ public class MapCreatorScript : MonoBehaviour
             return;
         }
 
-        var MainScript = MainController.Instance;
-        if (MainScript == null || MainScript._dungeonsMainInfo == null || MainScript._dungeonsMainInfo.Length == 0)
+        if (MainController.Instance == null)
         {
-            Debug.LogWarning("No hay MainController o _dungeonsMainInfo asignados.");
+            Debug.LogWarning("MainController no existe.");
             return;
         }
 
-        // Posición inicial para el primer mapa
-        Vector3 spawnPosition = _startPos;
 
-        // Recorremos cada mazmorra/stage configurada en _dungeonsMainInfo
-        for (int d = 0; d < MainScript._dungeonsMainInfo.Length; d++)
+        if (MainController.Instance._dungeonsMainInfo == null ||
+            MainController.Instance._dungeonsMainInfo.Length == 0)
         {
-            var dungeonInfo = MainScript._dungeonsMainInfo[d];
+            Debug.LogWarning("No hay DungeonsMainInfo.");
+            return;
+        }
 
-            if (dungeonInfo._DungeonIds == null || dungeonInfo._DungeonIds.Count == 0)
-                continue;
 
-            for (int i = 0; i < dungeonInfo._DungeonIds.Count; i++)
+        List<int> dungeonOrder =
+            MainController.Instance._dungeonsMainInfo[0]._DungeonIds;
+
+
+
+        if (dungeonOrder == null || dungeonOrder.Count == 0)
+        {
+            Debug.LogWarning("La lista de DungeonIds está vacía.");
+            return;
+        }
+
+
+
+        Vector3 nextSetStart = _startPos;
+        Quaternion nextSetRotation = Quaternion.identity;
+
+
+
+        for (int i = 0; i < dungeonOrder.Count; i++)
+        {
+
+            int mapIndex = dungeonOrder[i];
+
+
+            if (mapIndex < 0 || mapIndex >= _mapScriptables.Length)
             {
-                int mapID = dungeonInfo._DungeonIds[i];
+                Debug.LogWarning($"Map Scriptable {mapIndex} no existe.");
+                continue;
+            }
 
-                if (mapID < 0 || mapID >= _mapAssets.Length)
+
+
+            Map currentMap = _mapScriptables[mapIndex];
+
+
+            if (currentMap == null)
+            {
+                Debug.LogWarning($"Map Scriptable {mapIndex} es NULL.");
+                continue;
+            }
+
+
+
+            if (currentMap._mapGrid == null ||
+                currentMap._mapGrid.Count == 0)
+            {
+                Debug.LogWarning($"Grid vacía en Map {mapIndex}");
+                continue;
+            }
+
+
+
+            GameObject setParent = new GameObject($"Map Set {i}");
+
+            setParent.transform.SetParent(transform);
+
+            setParent.transform.position = nextSetStart;
+            setParent.transform.rotation = nextSetRotation;
+            setParent.transform.localScale = Vector3.one;
+
+
+
+            MapBeacons firstMapBeacons = null;
+            MapBeacons lastMapBeacons = null;
+
+
+
+            foreach (MapCell cell in currentMap._mapGrid)
+            {
+
+                if (cell.mapID < 0)
+                    continue;
+
+
+                if (cell.mapID >= _mapAssets.Length)
                 {
-                    Debug.LogWarning($"MapID {mapID} no existe en _mapAssets.");
+                    Debug.LogWarning(
+                        $"MapID {cell.mapID} no existe."
+                    );
+
                     continue;
                 }
 
-                int directionID = 0;
 
-                // ================================================
-                // OFFSET SEGÚN ORIENTACIÓN
-                // ================================================
-                Vector3 currentSpawnPos = spawnPosition;
-                switch (directionID)
-                {
-                    case 0:
-                        break;
-                    case 1:
-                        currentSpawnPos.x += _directionSeparation;
-                        break;
-                }
 
-                // ================================================
-                // ROTACIÓN
-                // ================================================
-                Quaternion spawnRotation = GetRotation(directionID);
 
-                // ================================================
-                // CREAR MAPA
-                // ================================================
-                GameObject map = Instantiate(
-                    _mapAssets[mapID],
-                    currentSpawnPos,
-                    spawnRotation
+                Vector3 localPosition = new Vector3(
+                    cell.x * _separation,
+                    0f,
+                    cell.z * _separation
                 );
 
-                map.transform.parent = transform;
+
+
+                Vector3 spawnPosition =
+                    nextSetStart +
+                    (nextSetRotation * localPosition);
+
+
+
+                Quaternion spawnRotation =
+                    nextSetRotation *
+                    GetRotation(cell.directionID);
+
+
+
+                GameObject map = Instantiate(
+                    _mapAssets[cell.mapID],
+                    spawnPosition,
+                    spawnRotation,
+                    setParent.transform
+                );
+
+
+
                 _allSpawnedMaps.Add(map);
 
-                MapBeacons beacons = map.GetComponent<MapBeacons>();
 
-                if (beacons != null)
+
+                MapBeacons beacons =
+                    map.GetComponent<MapBeacons>();
+
+
+                if (beacons == null)
+                    continue;
+
+
+
+                if (firstMapBeacons == null)
                 {
-                    foreach (MapBeacons.MainInfo info in beacons._mainInfo)
-                    {
-                        if (info._posBeacons == null)
-                            continue;
-
-                        Transform beacon = info._posBeacons;
-                        bool alreadyExists = false;
-
-                        foreach (Transform existingBeacon in _allMovementOrbs)
-                        {
-                            if (Vector3.Distance(beacon.position, existingBeacon.position) <= _beaconTolerance)
-                            {
-                                alreadyExists = true;
-                                break;
-                            }
-                        }
-
-                        if (!alreadyExists)
-                        {
-                            _allMovementOrbs.Add(beacon);
-                            _allChangeDirections.Add(info._changeDirections);
-                        }
-                    }
+                    firstMapBeacons = beacons;
                 }
 
-                // Avanzamos la posición para el siguiente mapa
-                spawnPosition += Vector3.right * _separation;
+
+                lastMapBeacons = beacons;
+
+
+
+                foreach (MapBeacons.MainInfo info in beacons._mainInfo)
+                {
+
+                    if (info._posBeacons == null)
+                        continue;
+
+
+
+                    Transform beacon = info._posBeacons;
+
+
+
+                    _allMovementOrbs.Add(info._posBeacons);
+                    _allChangeDirections.Add(info._changeDirections);
+                    _allCanStop.Add(info._canStop);
+                }
+            }
+
+
+
+
+
+            if (i > 0 &&
+                firstMapBeacons != null &&
+                firstMapBeacons._startBeacon != null)
+            {
+
+                Vector3 offset =
+                    nextSetStart -
+                    firstMapBeacons._startBeacon.position;
+
+
+                setParent.transform.position += offset;
+            }
+
+
+
+
+
+            if (lastMapBeacons != null &&
+                lastMapBeacons._endBeacon != null)
+            {
+
+                nextSetStart =
+                    lastMapBeacons._endBeacon.position;
+
+
+                nextSetRotation =
+                    lastMapBeacons._endBeacon.rotation;
             }
         }
     }

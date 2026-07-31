@@ -7,9 +7,12 @@ public class MapBeacons : MonoBehaviour
     {
         public Transform _posBeacons;
         public bool _changeDirections;
+        public bool _canStop;
     }
     public MainInfo[] _mainInfo;
 
+    public Transform _startBeacon;
+    public Transform _endBeacon;
     //public Transform[] _posBeacons;
     //public bool[] _changeDirections;
     

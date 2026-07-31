@@ -38,8 +38,10 @@ public class PlayerMovementScript : MonoBehaviour
       
         if (Moving)
         {
+
             MoveCharVoid();
             ReachPoint();
+            SlowChangingDirection();
         }
 
         if (_changingDirection)
@@ -50,12 +52,12 @@ public class PlayerMovementScript : MonoBehaviour
         _playerAnimator.SetBool("Moving", Moving);
     }
 
-    public IEnumerator MoveCharNumerator()
-    {
-        _cantClick = true;
-        yield return new WaitForSeconds(1);
-        _cantClick = false;
-    }
+    //public IEnumerator MoveCharNumerator()
+    //{
+    //    _cantClick = true;
+    //    yield return new WaitForSeconds(1);
+    //    _cantClick = false;
+    //}
     
     public void MoveCharVoid()
     {
@@ -66,29 +68,76 @@ public class PlayerMovementScript : MonoBehaviour
         
     }
 
+    //public void ReachPoint()
+    //{
+    //    if(_distance <= 0.2f && !_cantClick)
+    //    {
+    //        _onPos++;
+    //        _nextPoint = new Vector3(
+    //            _mapScript._allMovementOrbs[_onPos + 1].transform.position.x,
+    //            _mapScript._allMovementOrbs[_onPos + 1].transform.position.y + MainController.Instance._scriptHero._heroScriptable[MainController.Instance._heroID]._height / 2.5f,
+    //            _mapScript._allMovementOrbs[_onPos + 1].transform.position.z
+    //        );
+
+    //        if (_mapScript._allChangeDirections[_onPos])
+    //        {
+    //            StartCoroutine(RotationNumerator());
+    //            Debug.Log("cambia de direccion");
+    //        }
+
+    //        Debug.Log("Se detiene");         
+    //        _cantClick = false;
+    //        Moving = false;
+
+    //    }
+    //}
     public void ReachPoint()
     {
-        if(_distance <= 0.2f && !_cantClick)
+        if (_distance <= 0.2f && !_cantClick)
         {
+            // Acabamos de llegar al beacon al que nos dirigíamos
             _onPos++;
-            _nextPoint = new Vector3(
-                _mapScript._allMovementOrbs[_onPos + 1].transform.position.x,
-                _mapScript._allMovementOrbs[_onPos + 1].transform.position.y + MainController.Instance._scriptHero._heroScriptable[MainController.Instance._heroID]._height / 2.5f,
-                _mapScript._allMovementOrbs[_onPos + 1].transform.position.z
-            );
 
+            Debug.Log($"Beacon {_onPos}");
+
+            // Cambia dirección si este beacon lo requiere
             if (_mapScript._allChangeDirections[_onPos])
             {
                 StartCoroutine(RotationNumerator());
-                Debug.Log("cambia de direccion");
+                Debug.Log("Cambia de dirección");
             }
 
-            Debug.Log("Se detiene");         
-            _cantClick = false;
+            // ¿Existe otro beacon después?
+            if (_onPos + 1 >= _mapScript._allMovementOrbs.Count)
+            {
+                Debug.Log("Fin del recorrido");
+                Moving = false;
+                return;
+            }
+
+            // Preparar el siguiente destino
+            _nextPoint = new Vector3(
+                _mapScript._allMovementOrbs[_onPos + 1].position.x,
+                _mapScript._allMovementOrbs[_onPos + 1].position.y +
+                MainController.Instance._scriptHero._heroScriptable[MainController.Instance._heroID]._height / 2.5f,
+                _mapScript._allMovementOrbs[_onPos + 1].position.z
+            );
+
+            // Si este beacon NO permite detenerse, seguir caminando
+            if (!_mapScript._allCanStop[_onPos])
+            {
+                return;
+            }
+
+            // Si permite detenerse
+            Debug.Log("Se detiene");
+
             Moving = false;
-            
+            _cantClick = false;
         }
     }
+
+
 
     public IEnumerator RotationNumerator()
     {
@@ -113,6 +162,26 @@ public class PlayerMovementScript : MonoBehaviour
                 player.rotation,
                 targetRotation,
                 _rotationSpeed * Time.deltaTime
+            );
+        }
+    }
+
+    public void SlowChangingDirection()
+    {
+        Transform player = MainController.Instance._playerParent.transform;
+        Transform target = _mapScript._allMovementOrbs[_onPos + 1];
+
+        Vector3 direction = target.position - player.position;
+        direction.y = 0f; // Ignorar inclinación vertical
+
+        if (direction.sqrMagnitude > 0.001f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+
+            player.rotation = Quaternion.Slerp(
+                player.rotation,
+                targetRotation,
+                (_rotationSpeed / 2) * Time.deltaTime
             );
         }
     }

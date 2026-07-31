@@ -11,7 +11,7 @@ public class ImageClickMovement : MonoBehaviour, IPointerClickHandler
         if (!ScriptMovement.Moving)
         {
             ScriptMovement.Moving = true;
-            StartCoroutine(ScriptMovement.MoveCharNumerator());         
+            //StartCoroutine(ScriptMovement.MoveCharNumerator());         
         }      
         
     }
