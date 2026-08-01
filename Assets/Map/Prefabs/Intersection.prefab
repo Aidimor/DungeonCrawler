@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4667293301425621398}
   - component: {fileID: 2696039299022363017}
   - component: {fileID: 2478553673372380876}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Exit2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 5525593929322461122}
   - component: {fileID: 943027392889291620}
   - component: {fileID: 7270647311374783372}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Exit1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -236,7 +236,7 @@ GameObject:
   - component: {fileID: 3020389992364841662}
   - component: {fileID: 7264065139971167247}
   - component: {fileID: 7527165417350488651}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Mid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -348,7 +348,7 @@ GameObject:
   - component: {fileID: 5460559527082983012}
   - component: {fileID: 7167658756225563512}
   - component: {fileID: 4708267571191390969}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Entrance
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -544,12 +544,18 @@ MonoBehaviour:
   _mainInfo:
   - _posBeacons: {fileID: 1261741347428866527}
     _changeDirections: 0
+    _canHoldFight: 0
   - _posBeacons: {fileID: 7760162475367058705}
     _changeDirections: 0
+    _canHoldFight: 0
   - _posBeacons: {fileID: 2594474946874837124}
     _changeDirections: 0
+    _canHoldFight: 0
   - _posBeacons: {fileID: 3588628506177750324}
     _changeDirections: 0
+    _canHoldFight: 0
+  _startBeacon: {fileID: 0}
+  _endBeacon: {fileID: 0}
 --- !u!4 &7952751484373036364 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bb61f51204556ac468ed4ec14808989f, type: 3}

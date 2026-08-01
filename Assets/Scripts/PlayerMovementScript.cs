@@ -15,30 +15,32 @@ public class PlayerMovementScript : MonoBehaviour
     public Animator _playerAnimator;
     public bool _changingDirection;
     public float _rotationSpeed;
-  
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+
     void Start()
     {
         _player = MainController.Instance._playerParent;
         _mapScript = MainController.Instance._mapScript;
-        _nextPoint = new Vector3(
-               _mapScript._allMovementOrbs[_onPos + 1].transform.position.x,
-               _mapScript._allMovementOrbs[_onPos + 1].transform.position.y + MainController.Instance._scriptHero._heroScriptable[MainController.Instance._heroID]._height / 2.5f,
-               _mapScript._allMovementOrbs[_onPos + 1].transform.position.z
-           );
+
+        // Validamos que exista al menos el siguiente punto al iniciar
+        if (_mapScript._allMovementOrbs != null && _mapScript._allMovementOrbs.Count > _onPos + 1)
+        {
+            _nextPoint = new Vector3(
+                   _mapScript._allMovementOrbs[_onPos + 1].transform.position.x,
+                   _mapScript._allMovementOrbs[_onPos + 1].transform.position.y + MainController.Instance._scriptHero._heroScriptable[MainController.Instance._heroID]._height / 2.5f,
+                   _mapScript._allMovementOrbs[_onPos + 1].transform.position.z
+               );
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(_nextPoint != null)
+        if (_nextPoint != null)
         {
             _distance = Vector3.Distance(_player.transform.position, _nextPoint);
         }
-      
+
         if (Moving)
         {
-
             MoveCharVoid();
             ReachPoint();
             SlowChangingDirection();
@@ -49,48 +51,19 @@ public class PlayerMovementScript : MonoBehaviour
             ChangingDirection();
         }
 
-        _playerAnimator.SetBool("Moving", Moving);
+        if (_playerAnimator != null)
+        {
+            _playerAnimator.SetBool("Moving", Moving);
+        }
     }
 
-    //public IEnumerator MoveCharNumerator()
-    //{
-    //    _cantClick = true;
-    //    yield return new WaitForSeconds(1);
-    //    _cantClick = false;
-    //}
-    
     public void MoveCharVoid()
     {
-
         _player.transform.position =
             Vector3.MoveTowards(_player.transform.position,
             _nextPoint, _speed * Time.deltaTime);
-        
     }
 
-    //public void ReachPoint()
-    //{
-    //    if(_distance <= 0.2f && !_cantClick)
-    //    {
-    //        _onPos++;
-    //        _nextPoint = new Vector3(
-    //            _mapScript._allMovementOrbs[_onPos + 1].transform.position.x,
-    //            _mapScript._allMovementOrbs[_onPos + 1].transform.position.y + MainController.Instance._scriptHero._heroScriptable[MainController.Instance._heroID]._height / 2.5f,
-    //            _mapScript._allMovementOrbs[_onPos + 1].transform.position.z
-    //        );
-
-    //        if (_mapScript._allChangeDirections[_onPos])
-    //        {
-    //            StartCoroutine(RotationNumerator());
-    //            Debug.Log("cambia de direccion");
-    //        }
-
-    //        Debug.Log("Se detiene");         
-    //        _cantClick = false;
-    //        Moving = false;
-
-    //    }
-    //}
     public void ReachPoint()
     {
         if (_distance <= 0.2f && !_cantClick)
@@ -100,26 +73,15 @@ public class PlayerMovementScript : MonoBehaviour
 
             Debug.Log($"Beacon {_onPos}");
 
-            // ================================================
-            // VERIFICAR SI HAY BATALLA EN ESTE BEACON
-            // ================================================
-            if (_mapScript._allEnemies != null && _mapScript._allEnemies.Contains(_onPos))
-            {
-                Debug.Log("Batalla");
-                Moving = false;
-                _cantClick = true; // Opcional: bloquea los clicks para que no siga moviéndose mientras ocurre la batalla
-                return;
-            }
-
             // Cambia dirección si este beacon lo requiere
-            if (_mapScript._allChangeDirections[_onPos])
+            if (_mapScript._allChangeDirections != null && _onPos < _mapScript._allChangeDirections.Count && _mapScript._allChangeDirections[_onPos])
             {
                 StartCoroutine(RotationNumerator());
                 Debug.Log("Cambia de dirección");
             }
 
-            // ¿Existe otro beacon después?
-            if (_onPos + 1 >= _mapScript._allMovementOrbs.Count)
+            // ¿Existe otro beacon después? Si no existe, fin del recorrido.
+            if (_mapScript._allMovementOrbs == null || _onPos + 1 >= _mapScript._allMovementOrbs.Count)
             {
                 Debug.Log("Fin del recorrido");
                 Moving = false;
@@ -134,20 +96,33 @@ public class PlayerMovementScript : MonoBehaviour
                 _mapScript._allMovementOrbs[_onPos + 1].position.z
             );
 
-            // Si este beacon NO permite detenerse, seguir caminando
-            if (!_mapScript._allCanStop[_onPos])
+            // ================================================
+            // CONDICIÓN DOBLE DE PARADA: 
+            // 1. Debe tener _canHoldFight en true en su componente BeaconScript.
+            // 2. Su índice (_onPos) debe estar enlistado en _allEnemies.
+            // ================================================
+            bool canHoldFight = false;
+            if (_mapScript._allMovementOrbs[_onPos].GetComponent<BeaconScript>() != null)
             {
+                canHoldFight = _mapScript._allMovementOrbs[_onPos].GetComponent<BeaconScript>()._canHoldFight;
+            }
+
+            bool isEnemyAssigned = _mapScript._allEnemies != null && _mapScript._allEnemies.Contains(_onPos);
+
+            if (canHoldFight && isEnemyAssigned)
+            {
+                Debug.Log("Batalla - Se detiene");
+                Moving = false;
+                _cantClick = true; // Bloquea clics por la batalla
+                StartCoroutine(MainController.Instance._scriptBattle.BattleStarts());
                 return;
             }
 
-            // Si permite detenerse
-            Debug.Log("Se detiene");
-
-            Moving = false;
+            // Si no cumple ambas condiciones, el personaje pasa de largo automáticamente
+            Moving = true;
             _cantClick = false;
         }
     }
-
 
     public IEnumerator RotationNumerator()
     {
@@ -158,11 +133,17 @@ public class PlayerMovementScript : MonoBehaviour
 
     public void ChangingDirection()
     {
+        // Validación de seguridad para que no intente rotar si ya no hay siguiente punto
+        if (_mapScript._allMovementOrbs == null || _onPos + 1 >= _mapScript._allMovementOrbs.Count)
+            return;
+
         Transform player = MainController.Instance._playerParent.transform;
         Transform target = _mapScript._allMovementOrbs[_onPos + 1];
 
+        if (target == null) return;
+
         Vector3 direction = target.position - player.position;
-        direction.y = 0f; // Ignorar inclinación vertical
+        direction.y = 0f;
 
         if (direction.sqrMagnitude > 0.001f)
         {
@@ -178,11 +159,17 @@ public class PlayerMovementScript : MonoBehaviour
 
     public void SlowChangingDirection()
     {
+        // Validación de seguridad para que no intente rotar si ya no hay siguiente punto
+        if (_mapScript._allMovementOrbs == null || _onPos + 1 >= _mapScript._allMovementOrbs.Count)
+            return;
+
         Transform player = MainController.Instance._playerParent.transform;
         Transform target = _mapScript._allMovementOrbs[_onPos + 1];
 
+        if (target == null) return;
+
         Vector3 direction = target.position - player.position;
-        direction.y = 0f; // Ignorar inclinación vertical
+        direction.y = 0f;
 
         if (direction.sqrMagnitude > 0.001f)
         {
@@ -195,6 +182,4 @@ public class PlayerMovementScript : MonoBehaviour
             );
         }
     }
-
-
 }

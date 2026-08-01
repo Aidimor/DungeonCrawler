@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6752567326710511970}
   - component: {fileID: 5712865581555385524}
   - component: {fileID: 318750710442095059}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: EndPoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,8 @@ GameObject:
   - component: {fileID: 9015164451481948259}
   - component: {fileID: 3055443156926556045}
   - component: {fileID: 9214402104522861299}
-  m_Layer: 0
+  - component: {fileID: 4545257122560661528}
+  m_Layer: 9
   m_Name: End
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -180,6 +181,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4545257122560661528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 767944033022944078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 270001d999cabaa4eacbd83961f20fe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BeaconScript
+  _canHoldFight: 0
 --- !u!1 &2583133147403265335
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,7 +205,7 @@ GameObject:
   - component: {fileID: 1286157917319869778}
   - component: {fileID: 5788424661196124463}
   - component: {fileID: 4681655327345699679}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: EndPoint (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -270,7 +284,7 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &2861318699601709734
+--- !u!1 &2708392287892165596
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -278,47 +292,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 847919765977498592}
-  - component: {fileID: 7869997553266137705}
-  - component: {fileID: 5307418460572005935}
-  m_Layer: 0
-  m_Name: Mid
+  - component: {fileID: 5798310511582256652}
+  - component: {fileID: 1218197001589219524}
+  - component: {fileID: 1681057679932824469}
+  m_Layer: 9
+  m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &847919765977498592
+--- !u!4 &5798310511582256652
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2861318699601709734}
+  m_GameObject: {fileID: 2708392287892165596}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.7071066, w: 0.70710707}
-  m_LocalPosition: {x: 0.00080682285, y: 0.0008068227, z: 0}
-  m_LocalScale: {x: 0.002314857, y: 0.002314857, z: 0.002314857}
-  m_ConstrainProportionsScale: 1
-  m_Children:
-  - {fileID: 8502470825296954497}
-  m_Father: {fileID: 1335158094881713653}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!33 &7869997553266137705
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.82, y: 0, z: 0}
+  m_LocalScale: {x: 0.37244, y: 0.37244, z: 0.37244}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1254674844310368410}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &1218197001589219524
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2861318699601709734}
+  m_GameObject: {fileID: 2708392287892165596}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &5307418460572005935
+--- !u!23 &1681057679932824469
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2861318699601709734}
+  m_GameObject: {fileID: 2708392287892165596}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -372,7 +385,8 @@ GameObject:
   - component: {fileID: 1977443794456068559}
   - component: {fileID: 1842307843087374149}
   - component: {fileID: 8869519320827801280}
-  m_Layer: 0
+  - component: {fileID: 3572344905173664226}
+  m_Layer: 9
   m_Name: EndPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -452,7 +466,20 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &3521851537347550629
+--- !u!114 &3572344905173664226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3466442763600706731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 270001d999cabaa4eacbd83961f20fe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BeaconScript
+  _canHoldFight: 0
+--- !u!1 &6073231649238472007
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -460,46 +487,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8502470825296954497}
-  - component: {fileID: 6316812696646894155}
-  - component: {fileID: 246701699325505411}
-  m_Layer: 0
-  m_Name: Mid (1)
+  - component: {fileID: 1254674844310368410}
+  - component: {fileID: 307219561809749426}
+  - component: {fileID: 868278710212540377}
+  - component: {fileID: 6787870485184602911}
+  m_Layer: 9
+  m_Name: Mid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8502470825296954497
+--- !u!4 &1254674844310368410
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3521851537347550629}
+  m_GameObject: {fileID: 6073231649238472007}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.0108603, z: 0}
-  m_LocalScale: {x: 0.37244, y: 0.37244, z: 0.37244}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0.00080682285, y: -0.00012, z: 0}
+  m_LocalScale: {x: 0.002, y: 0.002, z: 0.002}
   m_ConstrainProportionsScale: 1
-  m_Children: []
-  m_Father: {fileID: 847919765977498592}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6316812696646894155
+  m_Children:
+  - {fileID: 5798310511582256652}
+  m_Father: {fileID: 1335158094881713653}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!33 &307219561809749426
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3521851537347550629}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &246701699325505411
+  m_GameObject: {fileID: 6073231649238472007}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &868278710212540377
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3521851537347550629}
+  m_GameObject: {fileID: 6073231649238472007}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -542,6 +571,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6787870485184602911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6073231649238472007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 270001d999cabaa4eacbd83961f20fe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BeaconScript
+  _canHoldFight: 0
 --- !u!1 &6325719293975902354
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,7 +595,8 @@ GameObject:
   - component: {fileID: 2727622885610467609}
   - component: {fileID: 476733391584234007}
   - component: {fileID: 2263796927726122178}
-  m_Layer: 0
+  - component: {fileID: 8254609762740899866}
+  m_Layer: 9
   m_Name: StartBeacon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -633,6 +676,19 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8254609762740899866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6325719293975902354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 270001d999cabaa4eacbd83961f20fe3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BeaconScript
+  _canHoldFight: 0
 --- !u!1001 &1517104270910163486
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -694,9 +750,6 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ed31a460883d69746b5d49b46c489f25, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 847919765977498592}
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ed31a460883d69746b5d49b46c489f25, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 9015164451481948259}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ed31a460883d69746b5d49b46c489f25, type: 3}
       insertIndex: -1
@@ -704,6 +757,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ed31a460883d69746b5d49b46c489f25, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2727622885610467609}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ed31a460883d69746b5d49b46c489f25, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1254674844310368410}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ed31a460883d69746b5d49b46c489f25, type: 3}
       insertIndex: -1
@@ -732,11 +788,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapBeacons
   _mainInfo:
-  - _posBeacons: {fileID: 847919765977498592}
+  - _posBeacons: {fileID: 1254674844310368410}
     _changeDirections: 1
-    _canStop: 0
-  - _posBeacons: {fileID: 9015164451481948259}
-    _changeDirections: 0
-    _canStop: 0
+    _canHoldFight: 0
   _startBeacon: {fileID: 2727622885610467609}
   _endBeacon: {fileID: 1977443794456068559}

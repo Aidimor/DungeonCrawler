@@ -1,6 +1,7 @@
-using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEngine;
+using static MapBeacons;
 
 public class MapCreatorScript : MonoBehaviour
 {
@@ -362,6 +363,7 @@ public class MapCreatorScript : MonoBehaviour
         _allMovementOrbs.Clear();
         _allChangeDirections.Clear();
         _allCanStop.Clear();
+        _allEnemies.Clear(); // Limpiamos también la lista de enemigos por seguridad
 
 
         if (_mapScriptables == null || _mapScriptables.Length == 0)
@@ -543,7 +545,7 @@ public class MapCreatorScript : MonoBehaviour
 
                     _allMovementOrbs.Add(info._posBeacons);
                     _allChangeDirections.Add(info._changeDirections);
-                    _allCanStop.Add(info._canStop);
+                    //_allCanStop.Add(info._canStop);
                 }
             }
 
@@ -580,6 +582,12 @@ public class MapCreatorScript : MonoBehaviour
                     lastMapBeacons._endBeacon.rotation;
             }
         }
+
+        // =========================================================
+        // LLAMAMOS AQUÍ A LA GENERACIÓN DE ENEMIGOS UNA VEZ QUE 
+        // TODOS LOS BEACONS DEL MAPA YA FUERON RECOLECTADOS
+        // =========================================================
+        SpawnEnemies();
     }
     private Quaternion GetRotation(int directionID)
     {
@@ -672,8 +680,12 @@ public class MapCreatorScript : MonoBehaviour
     //    }
     //}
 
+    private bool _hasSpawnedEnemies = false;
     public void SpawnEnemies()
     {
+        if (_hasSpawnedEnemies) return;
+        _hasSpawnedEnemies = true;
+
         _allEnemies.Clear();
 
         if (_allMovementOrbs == null || _allMovementOrbs.Count == 0)
@@ -683,31 +695,51 @@ public class MapCreatorScript : MonoBehaviour
         }
 
         var dungeonCard = MainController.Instance._allDungeonCards[0];
-        int totalBeacons = _allMovementOrbs.Count;
         int cantidadAGenerar = dungeonCard._totalEnemySpawns;
 
-        // Si hay menos beacons que los que queremos generar, ajustamos el límite para evitar un bucle infinito
-        if (cantidadAGenerar > totalBeacons)
+        // ================================================
+        // PASO 1: RECOPILAR ÚNICAMENTE LOS BEACONS VÁLIDOS (_canHoldFight == true)
+        // ================================================
+        List<int> beaconsValidos = new List<int>();
+
+        for (int i = 0; i < _allMovementOrbs.Count; i++)
         {
-            cantidadAGenerar = totalBeacons;
-            Debug.LogWarning("Hay menos beacons que la cantidad de enemigos solicitada. Se ajustará al total disponible.");
+            if (_allMovementOrbs[i].GetComponent<BeaconScript>() != null &&
+                _allMovementOrbs[i].GetComponent<BeaconScript>()._canHoldFight)
+            {
+                beaconsValidos.Add(i);
+            }
         }
 
-        // Usamos un HashSet temporal para asegurar que los índices no se repiten
+        if (beaconsValidos.Count == 0)
+        {
+            Debug.LogWarning("No hay beacons disponibles con _canHoldFight activado para generar enemigos.");
+            return;
+        }
+
+        if (cantidadAGenerar > beaconsValidos.Count)
+        {
+            cantidadAGenerar = beaconsValidos.Count;
+            Debug.LogWarning("Hay menos beacons válidos con _canHoldFight que la cantidad de enemigos solicitada. Se ajustará al total disponible.");
+        }
+
+        // ================================================
+        // PASO 2: SELECCIONAR ÍNDICES ÚNICOS DE LOS BEACONS VÁLIDOS
+        // ================================================
         HashSet<int> indicesUnicos = new HashSet<int>();
 
         while (indicesUnicos.Count < cantidadAGenerar)
         {
-            int randomIndex = Random.Range(0, totalBeacons);
-            indicesUnicos.Add(randomIndex);
+            int randomValidIndex = Random.Range(0, beaconsValidos.Count);
+            int actualBeaconIndex = beaconsValidos[randomValidIndex];
+            indicesUnicos.Add(actualBeaconIndex);
         }
 
-        // Pasamos el resultado a la lista pública y la ordenamos de menor a mayor
         _allEnemies = new List<int>(indicesUnicos);
         _allEnemies.Sort();
 
         // ================================================
-        // SELECCIÓN E INSTANCIACIÓN DE ENEMIGOS EN LOS BEACONS
+        // PASO 3: SELECCIÓN E INSTANCIACIÓN DE ENEMIGOS EN LOS BEACONS
         // ================================================
         if (dungeonCard._enemies == null || dungeonCard._enemies.Length == 0)
         {
@@ -715,52 +747,46 @@ public class MapCreatorScript : MonoBehaviour
             return;
         }
 
-        // Validamos que el prefab general de este script esté asignado
         if (_enemyPrefab == null)
         {
             Debug.LogError("No se ha asignado el _enemyPrefab en el inspector de este script.");
             return;
         }
 
-        // Recorremos cada beacon seleccionado para convocar e instanciar al enemigo
         foreach (int beaconIndex in _allEnemies)
         {
             Monster summonedMonster = GetRandomEnemyByPercentage(dungeonCard._enemies);
 
             if (summonedMonster != null)
             {
-                // Obtenemos el Transform del beacon usando el índice guardado
                 Transform targetBeacon = _allMovementOrbs[beaconIndex];
 
                 if (targetBeacon != null)
                 {
-                    // 1. Instanciamos el _enemyPrefab de este script en la posición y rotación del beacon
                     GameObject spawnedEnemy = Instantiate(
                         _enemyPrefab,
                         targetBeacon.position,
-                        targetBeacon.rotation                      
+                        targetBeacon.rotation
                     );
 
                     spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localScale = summonedMonster._scale;
-                 
 
-                    // 2. Cambiamos la textura del material usando la instancia clonada (individual para este enemigo)
                     Renderer enemyRenderer = spawnedEnemy.GetComponent<EnemyScript>()._renderer.GetComponent<Renderer>();
                     if (enemyRenderer != null && summonedMonster._portraitTexture != null)
                     {
                         enemyRenderer.material.SetTexture("_MainTex", summonedMonster._portraitTexture);
                     }
 
-                    // 3. Asignamos a _enemiesParent como su contenedor/padre en la jerarquía
                     if (_enemiesParent != null)
                     {
                         spawnedEnemy.transform.SetParent(_enemiesParent);
-                        spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition = 
-                            new Vector3(spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition.x,
-                                  spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition.y,
-                            //spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition.y + summonedMonster._height,
-                        spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition.z);
-                    }   
+                        spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition =
+                            new Vector3(
+                                spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition.x,
+                                spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition.y,
+                                spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition.z
+                            );
+                    }
                     else
                     {
                         Debug.LogWarning("No se ha asignado _enemiesParent en el inspector. El enemigo se quedará sin padre en la raíz.");
@@ -780,7 +806,6 @@ public class MapCreatorScript : MonoBehaviour
         }
     }
 
-    // Método auxiliar para calcular qué enemigo sale basado en el porcentaje (suma 100%)
     private Monster GetRandomEnemyByPercentage(DungeonCard.Enemies[] enemiesList)
     {
         float roll = Random.Range(0f, 100f);
@@ -795,7 +820,6 @@ public class MapCreatorScript : MonoBehaviour
             }
         }
 
-        // Fallback por seguridad en caso de redondeo
         return enemiesList[enemiesList.Length - 1]._monsterCard;
     }
 }

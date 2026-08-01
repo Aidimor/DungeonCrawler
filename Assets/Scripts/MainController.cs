@@ -9,13 +9,15 @@ public class MainController : MonoBehaviour
     public MapCreatorScript _mapScript;
     public PlayerMovementScript _scriptMovement;
     public HeroController _scriptHero;
+    public BattleController _scriptBattle;
 
+    public Animator _cinematicAnimator;
     public GameObject _playerParent;
     public Camera _mainCamera;
 
     public int _heroID;
 
-    
+    public int _onStation; //0 = Nothing, 1 = DungeonMovement, 
 
 
     [System.Serializable]
@@ -58,6 +60,9 @@ public class MainController : MonoBehaviour
                 _mapScript._allMovementOrbs[0].transform.position.x,
                 (_mapScript._allMovementOrbs[0].transform.position.y + (MainController.Instance._scriptHero._heroScriptable[MainController.Instance._heroID]._height / 2.5f)),
                 _mapScript._allMovementOrbs[0].transform.position.z);
+
+        yield return new WaitForSeconds(1);
+        _onStation = 1;
 
     }
  

@@ -17,9 +17,9 @@ MonoBehaviour:
   _mapGrid:
   - x: 0
     z: 0
-    mapID: 0
+    mapID: 3
     directionID: 0
   - x: 0
     z: 1
-    mapID: 0
+    mapID: 3
     directionID: 0

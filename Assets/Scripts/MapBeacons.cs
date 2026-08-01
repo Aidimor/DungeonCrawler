@@ -6,8 +6,8 @@ public class MapBeacons : MonoBehaviour
     public class MainInfo
     {
         public Transform _posBeacons;
-        public bool _changeDirections;
-        public bool _canStop;
+        public bool _changeDirections;    
+        public bool _canHoldFight;
     }
     public MainInfo[] _mainInfo;
 
