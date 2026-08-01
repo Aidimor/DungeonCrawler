@@ -738,11 +738,14 @@ public class MapCreatorScript : MonoBehaviour
                     GameObject spawnedEnemy = Instantiate(
                         _enemyPrefab,
                         targetBeacon.position,
-                        targetBeacon.rotation
+                        targetBeacon.rotation                      
                     );
 
+                    spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localScale = summonedMonster._scale;
+                 
+
                     // 2. Cambiamos la textura del material usando la instancia clonada (individual para este enemigo)
-                    Renderer enemyRenderer = spawnedEnemy.GetComponent<Renderer>();
+                    Renderer enemyRenderer = spawnedEnemy.GetComponent<EnemyScript>()._renderer.GetComponent<Renderer>();
                     if (enemyRenderer != null && summonedMonster._portraitTexture != null)
                     {
                         enemyRenderer.material.SetTexture("_MainTex", summonedMonster._portraitTexture);
@@ -752,7 +755,12 @@ public class MapCreatorScript : MonoBehaviour
                     if (_enemiesParent != null)
                     {
                         spawnedEnemy.transform.SetParent(_enemiesParent);
-                    }
+                        spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition = 
+                            new Vector3(spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition.x,
+                                  spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition.y,
+                            //spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition.y + summonedMonster._height,
+                        spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localPosition.z);
+                    }   
                     else
                     {
                         Debug.LogWarning("No se ha asignado _enemiesParent en el inspector. El enemigo se quedará sin padre en la raíz.");

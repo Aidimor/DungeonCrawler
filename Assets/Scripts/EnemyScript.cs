@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyScript : MonoBehaviour
 {
     public Transform _playerTransform;
-    
+    public GameObject _renderer;
 
     void Start()
     {
@@ -12,7 +12,7 @@ public class EnemyScript : MonoBehaviour
 
     private void Update()
     {
-        this.transform.LookAt(_playerTransform.transform.position);
+        _renderer.transform.LookAt(_playerTransform.transform.position);
     }
 
 }

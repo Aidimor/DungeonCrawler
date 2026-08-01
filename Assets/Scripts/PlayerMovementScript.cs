@@ -100,6 +100,17 @@ public class PlayerMovementScript : MonoBehaviour
 
             Debug.Log($"Beacon {_onPos}");
 
+            // ================================================
+            // VERIFICAR SI HAY BATALLA EN ESTE BEACON
+            // ================================================
+            if (_mapScript._allEnemies != null && _mapScript._allEnemies.Contains(_onPos))
+            {
+                Debug.Log("Batalla");
+                Moving = false;
+                _cantClick = true; // Opcional: bloquea los clicks para que no siga moviéndose mientras ocurre la batalla
+                return;
+            }
+
             // Cambia dirección si este beacon lo requiere
             if (_mapScript._allChangeDirections[_onPos])
             {
@@ -136,7 +147,6 @@ public class PlayerMovementScript : MonoBehaviour
             _cantClick = false;
         }
     }
-
 
 
     public IEnumerator RotationNumerator()

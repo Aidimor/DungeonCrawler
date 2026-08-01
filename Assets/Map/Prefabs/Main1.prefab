@@ -322,7 +322,7 @@ MonoBehaviour:
   _mainInfo:
   - _posBeacons: {fileID: 6730326644023509660}
     _changeDirections: 0
-    _canStop: 1
+    _canStop: 0
   - _posBeacons: {fileID: 1310817795796409761}
     _changeDirections: 0
     _canStop: 0

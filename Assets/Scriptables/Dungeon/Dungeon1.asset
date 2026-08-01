@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c90accb7e57bf3443a18639b45c2eaef, type: 3}
   m_Name: Dungeon1
   m_EditorClassIdentifier: Assembly-CSharp::DungeonCard
-  _totalRandomCreations: 5
-  _totalEnemySpawns: 3
+  _totalRandomCreations: 2
+  _totalEnemySpawns: 2
   _enemies:
   - _monsterCard: {fileID: 11400000, guid: 31bcd03d6c0afb942b841d32e84a1305, type: 2}
     _percentage: 50

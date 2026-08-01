@@ -6,9 +6,8 @@ public class Monster : ScriptableObject
     public string name;
     public Sprite portrait;
     public Texture _portraitTexture;
-    public float _height;
-
-    public Vector3 _pos;
+    //public float _height;
+    //public float _distance;
     public Vector3 _scale;
 
     [System.Serializable]
