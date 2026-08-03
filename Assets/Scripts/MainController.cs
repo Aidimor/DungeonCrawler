@@ -10,6 +10,8 @@ public class MainController : MonoBehaviour
     public PlayerMovementScript _scriptMovement;
     public HeroController _scriptHero;
     public BattleController _scriptBattle;
+    public DeckCardController _scriptDeckController;
+    public MonsterDatabase _scriptMonster;
 
     public Animator _cinematicAnimator;
     public GameObject _playerParent;
@@ -46,6 +48,8 @@ public class MainController : MonoBehaviour
     void Start()
     {
         StartCoroutine(GameStarts());
+        _scriptDeckController.StartDeckCreation();
+        _scriptDeckController.ShuffleDeck();
     }
 
     void Update()

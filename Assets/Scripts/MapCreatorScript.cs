@@ -28,7 +28,8 @@ public class MapCreatorScript : MonoBehaviour
     public List<Transform> _allMovementOrbs;
     public List<bool> _allChangeDirections;
     public List<bool> _allCanStop = new List<bool>();
-    public List<int> _allEnemies = new List<int>();
+    public List<int> _allEnemiesPos = new List<int>();
+    public List<Monster> _allEnemiesCard = new List<Monster>();
 
     public float _beaconTolerance;
 
@@ -363,7 +364,7 @@ public class MapCreatorScript : MonoBehaviour
         _allMovementOrbs.Clear();
         _allChangeDirections.Clear();
         _allCanStop.Clear();
-        _allEnemies.Clear(); // Limpiamos también la lista de enemigos por seguridad
+        _allEnemiesPos.Clear(); // Limpiamos también la lista de enemigos por seguridad
 
 
         if (_mapScriptables == null || _mapScriptables.Length == 0)
@@ -686,7 +687,8 @@ public class MapCreatorScript : MonoBehaviour
         if (_hasSpawnedEnemies) return;
         _hasSpawnedEnemies = true;
 
-        _allEnemies.Clear();
+        _allEnemiesPos.Clear();
+        _allEnemiesCard.Clear();
 
         if (_allMovementOrbs == null || _allMovementOrbs.Count == 0)
         {
@@ -735,8 +737,8 @@ public class MapCreatorScript : MonoBehaviour
             indicesUnicos.Add(actualBeaconIndex);
         }
 
-        _allEnemies = new List<int>(indicesUnicos);
-        _allEnemies.Sort();
+        _allEnemiesPos = new List<int>(indicesUnicos);
+        _allEnemiesPos.Sort();
 
         // ================================================
         // PASO 3: SELECCIÓN E INSTANCIACIÓN DE ENEMIGOS EN LOS BEACONS
@@ -753,12 +755,16 @@ public class MapCreatorScript : MonoBehaviour
             return;
         }
 
-        foreach (int beaconIndex in _allEnemies)
+        foreach (int beaconIndex in _allEnemiesPos)
         {
+            // Obtenemos el monstruo aleatorio basado en los porcentajes
             Monster summonedMonster = GetRandomEnemyByPercentage(dungeonCard._enemies);
 
             if (summonedMonster != null)
             {
+                // Guardamos la referencia exacta del monstruo elegido en la lista
+                _allEnemiesCard.Add(summonedMonster);
+
                 Transform targetBeacon = _allMovementOrbs[beaconIndex];
 
                 if (targetBeacon != null)

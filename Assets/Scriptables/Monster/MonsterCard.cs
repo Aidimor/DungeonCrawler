@@ -4,6 +4,7 @@ using UnityEngine;
 public class Monster : ScriptableObject
 {
     public string name;
+    public int _hp;
     public Sprite portrait;
     public Texture _portraitTexture;
     //public float _height;

@@ -99,7 +99,7 @@ public class PlayerMovementScript : MonoBehaviour
             // ================================================
             // CONDICIÓN DOBLE DE PARADA: 
             // 1. Debe tener _canHoldFight en true en su componente BeaconScript.
-            // 2. Su índice (_onPos) debe estar enlistado en _allEnemies.
+            // 2. Su índice (_onPos) debe estar enlistado en _allEnemiesPos.
             // ================================================
             bool canHoldFight = false;
             if (_mapScript._allMovementOrbs[_onPos].GetComponent<BeaconScript>() != null)
@@ -107,14 +107,30 @@ public class PlayerMovementScript : MonoBehaviour
                 canHoldFight = _mapScript._allMovementOrbs[_onPos].GetComponent<BeaconScript>()._canHoldFight;
             }
 
-            bool isEnemyAssigned = _mapScript._allEnemies != null && _mapScript._allEnemies.Contains(_onPos);
+            bool isEnemyAssigned = _mapScript._allEnemiesPos != null && _mapScript._allEnemiesPos.Contains(_onPos);
 
             if (canHoldFight && isEnemyAssigned)
             {
                 Debug.Log("Batalla - Se detiene");
                 Moving = false;
                 _cantClick = true; // Bloquea clics por la batalla
+
+                // ================================================
+                // OBTENER EL MONSTRUO EXACTO DE ESTA BATALLA
+                // ================================================
+                int enemyIndexInList = _mapScript._allEnemiesPos.IndexOf(_onPos);
+                if (enemyIndexInList != -1 && enemyIndexInList < _mapScript._allEnemiesCard.Count)
+                {
+                    Monster currentEnemyMonster = _mapScript._allEnemiesCard[enemyIndexInList];
+                    Debug.Log($"¡Te enfrentas a: {currentEnemyMonster.name}!");
+                    MainController.Instance._scriptBattle.SetEnemyInfo(currentEnemyMonster);
+
+                    // Si necesitas enviarlo al controlador de batalla, puedes guardarlo en alguna variable global o pasarlo por parámetro:
+                    // MainController.Instance._currentActiveEnemy = currentEnemyMonster;
+                }
+
                 StartCoroutine(MainController.Instance._scriptBattle.BattleStarts());
+           
                 return;
             }
 
@@ -123,7 +139,6 @@ public class PlayerMovementScript : MonoBehaviour
             _cantClick = false;
         }
     }
-
     public IEnumerator RotationNumerator()
     {
         _changingDirection = true;

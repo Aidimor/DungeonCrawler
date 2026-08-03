@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d41849c6f298474087b562e36fd8e83, type: 3}
-  m_Name: AttackCard
+  m_Name: +1AttackCard
   m_EditorClassIdentifier: Assembly-CSharp::CardsCard
   _name: 
   _id: 0
-  _cardInfo: []
+  _cardInfo:
+  - _type: 0
+    _quantity: 1

@@ -15,3 +15,8 @@ MonoBehaviour:
   name: 
   portrait: {fileID: 0}
   _height: 1
+  _startCards:
+  - {fileID: 11400000, guid: c8a80994e323c914f9d4cd77554b00e6, type: 2}
+  - {fileID: 11400000, guid: c8a80994e323c914f9d4cd77554b00e6, type: 2}
+  - {fileID: 11400000, guid: efb2b2f98780b984cac1c7885ba25996, type: 2}
+  - {fileID: 11400000, guid: efb2b2f98780b984cac1c7885ba25996, type: 2}

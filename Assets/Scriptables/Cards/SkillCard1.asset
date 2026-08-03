@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: SkillCard1
   m_EditorClassIdentifier: Assembly-CSharp::CardsCard
   _name: 
-  _id: 0
+  _id: 2
   _cardInfo: []

@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Monster8
   m_EditorClassIdentifier: 
   name: Skeleton
+  _hp: 3
   portrait: {fileID: -1275200856, guid: b3b85ee1ee802854785bbabc13dfebb6, type: 3}
   _portraitTexture: {fileID: 2800000, guid: 1bba82e092ecd544e92921785e8d57d2, type: 3}
-  _height: 0.7
-  _distance: 0
   _scale: {x: 1, y: 1, z: 1}
   _skills: 
