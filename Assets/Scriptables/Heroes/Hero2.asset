@@ -15,3 +15,5 @@ MonoBehaviour:
   name: 
   portrait: {fileID: 0}
   _height: 1.5
+  _hp: 15
+  _startCards: []

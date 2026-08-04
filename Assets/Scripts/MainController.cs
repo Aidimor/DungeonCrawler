@@ -50,6 +50,7 @@ public class MainController : MonoBehaviour
         StartCoroutine(GameStarts());
         _scriptDeckController.StartDeckCreation();
         _scriptDeckController.ShuffleDeck();
+        _scriptBattle.SetPlayerInfo(_scriptHero._heroScriptable[_heroID]);
     }
 
     void Update()
