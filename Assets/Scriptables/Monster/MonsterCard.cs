@@ -7,6 +7,7 @@ public class Monster : ScriptableObject
     public int _hp;
     public Sprite portrait;
     public Texture _portraitTexture;
+    public int _attack;
     //public float _height;
     //public float _distance;
     public Vector3 _scale;

@@ -36,6 +36,8 @@ public class MapCreatorScript : MonoBehaviour
     public GameObject _enemyPrefab;
     public Transform _enemiesParent;
 
+    public List<GameObject> _enemiesSpawned = new List<GameObject>();
+
     private void Start()
     {
 
@@ -778,6 +780,7 @@ public class MapCreatorScript : MonoBehaviour
                     spawnedEnemy.GetComponent<EnemyScript>()._renderer.transform.localScale = summonedMonster._scale;
 
                     Renderer enemyRenderer = spawnedEnemy.GetComponent<EnemyScript>()._renderer.GetComponent<Renderer>();
+                    _enemiesSpawned.Add(spawnedEnemy);
                     if (enemyRenderer != null && summonedMonster._portraitTexture != null)
                     {
                         enemyRenderer.material.SetTexture("_MainTex", summonedMonster._portraitTexture);

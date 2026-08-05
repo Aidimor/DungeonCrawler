@@ -122,11 +122,10 @@ public class PlayerMovementScript : MonoBehaviour
                 if (enemyIndexInList != -1 && enemyIndexInList < _mapScript._allEnemiesCard.Count)
                 {
                     Monster currentEnemyMonster = _mapScript._allEnemiesCard[enemyIndexInList];
-                    Debug.Log($"¡Te enfrentas a: {currentEnemyMonster.name}!");
+                    //Debug.Log($"¡Te enfrentas a: {currentEnemyMonster.name}!");
                     MainController.Instance._scriptBattle.SetEnemyInfo(currentEnemyMonster);
-
-                    // Si necesitas enviarlo al controlador de batalla, puedes guardarlo en alguna variable global o pasarlo por parámetro:
-                    // MainController.Instance._currentActiveEnemy = currentEnemyMonster;
+                    MainController.Instance._scriptBattle._currentMonster = currentEnemyMonster;
+                    MainController.Instance._scriptBattle._monsterFightingObject = MainController.Instance._mapScript._enemiesSpawned[enemyIndexInList];
                 }
 
                 StartCoroutine(MainController.Instance._scriptBattle.BattleStarts());

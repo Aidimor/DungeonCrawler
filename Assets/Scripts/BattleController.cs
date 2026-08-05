@@ -8,6 +8,9 @@ public class BattleController : MonoBehaviour
 {
     public Animator _battlePanelAnimator;
     public Animator _enemyPanelAnimator;
+    public Monster _currentMonster;
+    public GameObject _monsterFightingObject;
+    public GameObject _cardGiftPanel;
 
     [System.Serializable]
     public class EnemyAssets
@@ -122,8 +125,24 @@ public class BattleController : MonoBehaviour
                         DefenseVoid(Main._allCards[Main._deckCards[id]]._cardInfo[0]._quantity);
                         break;
                 }
+                if(_enemyAssets._totalHp == 0)
+                {
+                    yield return new WaitForSeconds(1);
+                    _cardGiftPanel.SetActive(true);
+                    yield break;
+                }
+          
+                    ThrowCardsVoid();
+                    yield return new WaitForSeconds(2);
+                    _battleStation = 1;
+                    EnemyAttacks();
+                    yield return new WaitForSeconds(1);
+                    NewCardsVoid();
+                
+            
                 break;
             case 1:
+             
                 break;
             case 2:
                 break;
@@ -133,13 +152,75 @@ public class BattleController : MonoBehaviour
 
     public void AttackVoid(int damage)
     {
-        _enemyAssets._totalHp -= damage;
-        //Debug.Log("Attack");
+      
+        if(_enemyAssets._totalHp - damage <= 0)
+        {
+            _enemyAssets._totalHp = 0;
+            MonsterKillVoid();
+        }
+        else
+        {
+            _enemyAssets._totalHp -= damage;
+        }
     }
 
     public void DefenseVoid(int shield)
     {
-        _playerAssets._shieldPoints += shield;
-        //Debug.Log("Defense");
+        _playerAssets._shieldPoints += shield;     
+    }
+
+    public void EnemyAttacks()
+    {
+        var DamageDone = _currentMonster._attack;
+        for (int i = 0; i < DamageDone; i++)
+        {
+            if(_playerAssets._shieldPoints > 0)
+            {
+                _playerAssets._shieldPoints--;
+            }
+            else
+            {
+                _playerAssets._totalHp--;
+            }
+        }
+    }
+
+    public void NewCardsVoid()
+    {
+        var deck = MainController.Instance._scriptDeckController;
+
+        // Mientras no haya 3 cartas en la mano
+        while (deck._deckCards.Count < 3 && deck._discardedCards.Count > 0)
+        {
+            int randomIndex = Random.Range(0, deck._discardedCards.Count);
+
+            deck._deckCards.Add(deck._discardedCards[randomIndex]);
+            deck._discardedCards.RemoveAt(randomIndex);
+        }
+        deck.SetCardsInHand();
+        StartCoroutine(BattleStarts());
+    
+    }
+
+    public void ThrowCardsVoid()
+    {
+        var DeckScript = MainController.Instance._scriptDeckController;
+        for (int i = 0; i < 3; i++)
+        {
+            DeckScript._discardedCards.Add(DeckScript._deckCards[0]);
+            DeckScript._deckCards.RemoveAt(0);
+        }
+    }
+
+    public void MonsterKillVoid()
+    {
+        StartCoroutine(_monsterFightingObject.GetComponent<EnemyScript>().DeadNumerator());
+        
+    }
+
+    public void EndsFight()
+    {
+        _cardGiftPanel.SetActive(false);
+        MainController.Instance._onStation = 1;
     }
 }

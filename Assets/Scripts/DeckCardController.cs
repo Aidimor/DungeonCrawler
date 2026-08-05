@@ -7,6 +7,7 @@ public class DeckCardController : MonoBehaviour
 {
     public CardsCard[] _allCards;
     public List<int> _deckCards = new List<int>();
+    public List<int> _discardedCards = new List<int>();
     [System.Serializable]
     public class HandCards
     {
