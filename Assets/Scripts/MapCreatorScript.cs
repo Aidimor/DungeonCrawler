@@ -902,7 +902,9 @@ public class MapCreatorScript : MonoBehaviour
                 GameObject Chest = Instantiate(MainController.Instance._scriptChest._chestPrefab,
                     new Vector3(SetPos.x, SetPos.y + 0.2f, SetPos.z + 2),
                    transform.rotation);
+                Chest.GetComponent<ChestObjectController>()._giftID = MainController.Instance._scriptChest.ChestGiftChoose();
                 _chestObjects.Add(Chest);
+            
             }
         }
 

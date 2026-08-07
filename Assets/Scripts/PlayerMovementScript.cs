@@ -80,6 +80,17 @@ public class PlayerMovementScript : MonoBehaviour
                 Debug.Log("Cambia de dirección");
             }
 
+            // Detección de cofre en la posición actual
+            //================================Se detiene Chest==========================================
+            if (_mapScript._allChestsPos != null && _mapScript._allChestsPos.Contains(_onPos))
+            {
+                Debug.Log($"¡Has llegado a un cofre en el Beacon {_onPos}!");
+                MainController.Instance._scriptChest._currentChest = MainController.Instance._mapScript._chestObjects[MainController.Instance._mapScript._allChestsPos.IndexOf(_onPos)];              
+                StartCoroutine(MainController.Instance._scriptChest.ChestFoundNumerator(MainController.Instance._scriptChest._currentChest));  
+
+                return;
+            }
+            //===========================================================================================
             // ¿Existe otro beacon después? Si no existe, fin del recorrido.
             if (_mapScript._allMovementOrbs == null || _onPos + 1 >= _mapScript._allMovementOrbs.Count)
             {
@@ -109,6 +120,7 @@ public class PlayerMovementScript : MonoBehaviour
 
             bool isEnemyAssigned = _mapScript._allEnemiesPos != null && _mapScript._allEnemiesPos.Contains(_onPos);
 
+            //================================Se detiene batalla==========================================
             if (canHoldFight && isEnemyAssigned)
             {
                 Debug.Log("Batalla - Se detiene");
@@ -122,16 +134,16 @@ public class PlayerMovementScript : MonoBehaviour
                 if (enemyIndexInList != -1 && enemyIndexInList < _mapScript._allEnemiesCard.Count)
                 {
                     Monster currentEnemyMonster = _mapScript._allEnemiesCard[enemyIndexInList];
-                    //Debug.Log($"¡Te enfrentas a: {currentEnemyMonster.name}!");
                     MainController.Instance._scriptBattle.SetEnemyInfo(currentEnemyMonster);
                     MainController.Instance._scriptBattle._currentMonster = currentEnemyMonster;
                     MainController.Instance._scriptBattle._monsterFightingObject = MainController.Instance._mapScript._enemiesSpawned[enemyIndexInList];
                 }
 
                 StartCoroutine(MainController.Instance._scriptBattle.BattleStarts());
-           
+
                 return;
             }
+            //=================================================================================================
 
             // Si no cumple ambas condiciones, el personaje pasa de largo automáticamente
             Moving = true;

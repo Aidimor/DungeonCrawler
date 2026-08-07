@@ -8,7 +8,7 @@ public class BattleController : MonoBehaviour
 {
     public Animator _battlePanelAnimator;
     public Animator _enemyPanelAnimator;
-    public Monster _currentMonster;
+    public Monster _currentMonster;   
     public GameObject _monsterFightingObject;
     public GameObject _cardGiftPanel;
 
@@ -47,6 +47,14 @@ public class BattleController : MonoBehaviour
         public CardsCard _cardInfo;
     }
     public CardsOption[] _cardsOption;
+
+    [System.Serializable]
+    public class ChestPanel
+    {
+        public GameObject _panel;
+        public TextMeshProUGUI _giftText;
+    }
+    public ChestPanel _chestPanel;
 
     public int _battleStation; //0 = Choose Action, 1 = Attack, 2 = EnemyAttack
 
