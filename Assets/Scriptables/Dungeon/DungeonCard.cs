@@ -5,6 +5,7 @@ public class DungeonCard: ScriptableObject
 {
     public int _totalRandomCreations;
     public int _totalEnemySpawns;
+    public int _totalRandomChests;
     [System.Serializable]
     public class Enemies
     {

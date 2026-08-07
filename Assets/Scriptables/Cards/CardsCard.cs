@@ -14,7 +14,7 @@ public class CardsCard: ScriptableObject
         {
             Attack,
             Defense,
-            Special
+            Venom
         }
         public Type _type;
         public int _quantity;

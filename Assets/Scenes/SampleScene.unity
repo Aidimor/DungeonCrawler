@@ -277,6 +277,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383492799}
         m_TargetAssemblyTypeName: BattleController, Assembly-CSharp
+        m_MethodName: ChooseCardGift
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 383492799}
+        m_TargetAssemblyTypeName: BattleController, Assembly-CSharp
         m_MethodName: EndsFight
         m_Mode: 1
         m_Arguments:
@@ -966,6 +978,13 @@ MonoBehaviour:
     _maxHp: 0
     _totalHp: 0
     _fillAmmount: 0
+  _cardsOption:
+  - _card: {fileID: 827349420}
+    _description: {fileID: 1579806219}
+    _cardInfo: {fileID: 0}
+  - _card: {fileID: 64391872}
+    _description: {fileID: 280631221}
+    _cardInfo: {fileID: 0}
   _battleStation: 0
 --- !u!4 &383492800
 Transform:
@@ -2405,12 +2424,24 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 383492799}
         m_TargetAssemblyTypeName: BattleController, Assembly-CSharp
+        m_MethodName: ChooseCardGift
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 383492799}
+        m_TargetAssemblyTypeName: BattleController, Assembly-CSharp
         m_MethodName: EndsFight
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2713,13 +2744,14 @@ MonoBehaviour:
   _scriptBattle: {fileID: 383492799}
   _scriptDeckController: {fileID: 1387760372}
   _scriptMonster: {fileID: 1290811466}
+  _scriptChest: {fileID: 1559004328}
   _cinematicAnimator: {fileID: 1649396025}
   _playerParent: {fileID: 510038384}
   _mainCamera: {fileID: 674857196}
   _heroID: 0
   _onStation: 0
   _dungeonsMainInfo:
-  - _DungeonIds: 000000000100000002000000
+  - _DungeonIds: 000000000000000000000000
     _random: 0
   _allDungeonCards:
   - {fileID: 11400000, guid: c1c67d95f7686704f9ca05b7c6c4aae8, type: 2}
@@ -2773,10 +2805,7 @@ MonoBehaviour:
   - {fileID: 7284020418673096694, guid: af765b175b08131498032fd9523cb9fb, type: 3}
   - {fileID: 1859071414457939791, guid: addc95e4804f06d4ea102eaaf76c2f70, type: 3}
   _mapScriptables:
-  - {fileID: 11400000, guid: 760009173d1db1044844841b914cd0a6, type: 2}
-  - {fileID: 11400000, guid: 4d580dcd672dcba49b51ba00a050426a, type: 2}
-  - {fileID: 11400000, guid: cd7e27719060bc742925109980a00b18, type: 2}
-  - {fileID: 11400000, guid: e75a89f45fa4c574eace9eda2542c233, type: 2}
+  - {fileID: 11400000, guid: e46f85c1f29e30f41b10acf19e933fed, type: 2}
   _gridWidth: 7
   _gridHeight: 7
   _startPos: {x: 0, y: 0, z: 0}
@@ -2787,11 +2816,13 @@ MonoBehaviour:
   _allChangeDirections: 
   _allCanStop: 
   _allEnemiesPos: 
+  _allChestsPos: 
   _allEnemiesCard: []
   _beaconTolerance: 0.5
   _enemyPrefab: {fileID: 8041564182084572744, guid: db63b5fffa6540b40a8d33863bf3ac42, type: 3}
   _enemiesParent: {fileID: 1911315880}
   _enemiesSpawned: []
+  _chestObjects: []
 --- !u!4 &933061411
 Transform:
   m_ObjectHideFlags: 0
@@ -4227,6 +4258,7 @@ MonoBehaviour:
   _allCards:
   - {fileID: 11400000, guid: c8a80994e323c914f9d4cd77554b00e6, type: 2}
   - {fileID: 11400000, guid: efb2b2f98780b984cac1c7885ba25996, type: 2}
+  - {fileID: 11400000, guid: 1b7039d001ece914fb95923e30955b7b, type: 2}
   - {fileID: 11400000, guid: 3a7dd58aaa39aca4a8af66f133bec53c, type: 2}
   _deckCards: 
   _discardedCards: 
@@ -4402,6 +4434,58 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1549733077}
   m_CullTransparentMesh: 1
+--- !u!1 &1559004326
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1559004327}
+  - component: {fileID: 1559004328}
+  m_Layer: 0
+  m_Name: ChestController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1559004327
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559004326}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.25433, y: 4.909, z: 16.01549}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1559004328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559004326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3803dba7d674c1c4da8a56db325ff4a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  _chestPrefab: {fileID: 2632479520525599399, guid: 76dbb6f1b1069b04a9aac0e04f35663d, type: 3}
+  _gifts:
+  - _type: 0
+    _chance: 33
+  - _type: 1
+    _chance: 33
+  - _type: 2
+    _chance: 33
 --- !u!1001 &1571189761
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6467,10 +6551,11 @@ SceneRoots:
   - {fileID: 1624446205}
   - {fileID: 510038389}
   - {fileID: 338319720}
-  - {fileID: 903786455}
   - {fileID: 987207769}
   - {fileID: 933061411}
   - {fileID: 1928330062}
   - {fileID: 383492800}
   - {fileID: 1387760373}
   - {fileID: 1290811465}
+  - {fileID: 1559004327}
+  - {fileID: 903786455}

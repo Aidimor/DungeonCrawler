@@ -10,8 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d41849c6f298474087b562e36fd8e83, type: 3}
-  m_Name: SkillCard1
+  m_Name: SnakeSkillCard
   m_EditorClassIdentifier: Assembly-CSharp::CardsCard
   _name: 
   _id: 2
-  _cardInfo: []
+  _cardInfo:
+  - _type: 0
+    _quantity: 2
+  - _type: 2
+    _quantity: 1

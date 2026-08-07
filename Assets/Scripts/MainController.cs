@@ -12,6 +12,7 @@ public class MainController : MonoBehaviour
     public BattleController _scriptBattle;
     public DeckCardController _scriptDeckController;
     public MonsterDatabase _scriptMonster;
+    public ChestControllerScript _scriptChest;
 
     public Animator _cinematicAnimator;
     public GameObject _playerParent;

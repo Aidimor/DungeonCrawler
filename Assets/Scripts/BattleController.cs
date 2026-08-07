@@ -39,6 +39,15 @@ public class BattleController : MonoBehaviour
     }
     public PlayerAssets _playerAssets;
 
+    [System.Serializable]
+    public class CardsOption
+    {
+        public GameObject _card;
+        public TextMeshProUGUI _description;
+        public CardsCard _cardInfo;
+    }
+    public CardsOption[] _cardsOption;
+
     public int _battleStation; //0 = Choose Action, 1 = Attack, 2 = EnemyAttack
 
 
@@ -127,6 +136,7 @@ public class BattleController : MonoBehaviour
                 }
                 if(_enemyAssets._totalHp == 0)
                 {
+                    GiftCardsChoose();
                     yield return new WaitForSeconds(1);
                     _cardGiftPanel.SetActive(true);
                     yield break;
@@ -212,15 +222,84 @@ public class BattleController : MonoBehaviour
         }
     }
 
+    public void GiftCardsChoose()
+    {
+        // Validación de seguridad por si el monstruo no tiene cartas configuradas
+        if (_currentMonster._giftCard == null || _currentMonster._giftCard.Length == 0)
+        {
+            Debug.LogWarning("El monstruo no tiene GiftCards configuradas.");
+            return;
+        }
+
+        // Creamos una lista temporal de las cartas para poder manipularlas (marcar como elegidas)
+        List<Monster.GiftCard> availableCards = new List<Monster.GiftCard>(_currentMonster._giftCard);
+
+        // Queremos seleccionar 2 opciones (o solo 1 si el monstruo tiene menos de 2 configuradas)
+        int cantidadAElegir = Mathf.Min(2, availableCards.Count);
+
+        Debug.Log("--- Seleccionando opciones de regalo ---");
+
+        for (int i = 0; i < cantidadAElegir; i++)
+        {
+            // 1. Recalcular el total sumando únicamente los porcentajes de las opciones que AÚN NO han sido seleccionadas
+            float totalChance = 0f;
+            foreach (var gift in availableCards)
+            {
+                totalChance += gift._chace;
+            }
+
+            if (totalChance <= 0f) break;
+
+            // 2. Tirar el dado aleatorio basado en el total actual
+            float roll = Random.Range(0f, totalChance);
+            float cumulativeProbability = 0f;
+            int selectedIndex = -1;
+
+            for (int j = 0; j < availableCards.Count; j++)
+            {
+                cumulativeProbability += availableCards[j]._chace;
+                if (roll <= cumulativeProbability)
+                {
+                    selectedIndex = j;
+                    break;
+                }
+            }
+
+            // Fallback por seguridad de redondeo flotante
+            if (selectedIndex == -1)
+            {
+                selectedIndex = availableCards.Count - 1;
+            }
+
+            // 3. Obtener la opción elegida y mostrarla en el Debug
+            var chosenGift = availableCards[selectedIndex];
+            string cardName = chosenGift._card != null ? chosenGift._card.name : "Carta sin asignar";
+            _cardsOption[i]._cardInfo = availableCards[selectedIndex]._card;
+            _cardsOption[i]._description.text = cardName;
+            Debug.Log($"Opción {i + 1} elegida: {cardName} (Probabilidad acumulada/ajustada)");
+
+            // 4. Remover la carta de la lista temporal para evitar que se repita en la siguiente vuelta
+            availableCards.RemoveAt(selectedIndex);
+        }
+    }
     public void MonsterKillVoid()
     {
         StartCoroutine(_monsterFightingObject.GetComponent<EnemyScript>().DeadNumerator());
         
     }
 
+    public void ChooseCardGift(int id)
+    {
+        MainController.Instance._scriptDeckController._discardedCards.Add(_cardsOption[id]._cardInfo._id);
+    }
+
     public void EndsFight()
     {
         _cardGiftPanel.SetActive(false);
+        _currentMonster = null;
+        MainController.Instance._scriptMovement._cantClick = false;
+        MainController.Instance._cinematicAnimator.SetBool("CinematicIn", false);
+        _enemyPanelAnimator.SetBool("EnemyIn", false);
         MainController.Instance._onStation = 1;
     }
 }

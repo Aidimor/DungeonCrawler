@@ -19,3 +19,10 @@ MonoBehaviour:
   _attack: 1
   _scale: {x: 1, y: 1, z: 1}
   _skills: 
+  _giftCard:
+  - _card: {fileID: 11400000, guid: 1b7039d001ece914fb95923e30955b7b, type: 2}
+    _chace: 25
+  - _card: {fileID: 11400000, guid: c8a80994e323c914f9d4cd77554b00e6, type: 2}
+    _chace: 35
+  - _card: {fileID: 11400000, guid: efb2b2f98780b984cac1c7885ba25996, type: 2}
+    _chace: 40

@@ -29,6 +29,7 @@ public class MapCreatorScript : MonoBehaviour
     public List<bool> _allChangeDirections;
     public List<bool> _allCanStop = new List<bool>();
     public List<int> _allEnemiesPos = new List<int>();
+    public List<int> _allChestsPos = new List<int>();
     public List<Monster> _allEnemiesCard = new List<Monster>();
 
     public float _beaconTolerance;
@@ -37,6 +38,7 @@ public class MapCreatorScript : MonoBehaviour
     public Transform _enemiesParent;
 
     public List<GameObject> _enemiesSpawned = new List<GameObject>();
+    public List<GameObject> _chestObjects = new List<GameObject>();
 
     private void Start()
     {
@@ -44,6 +46,7 @@ public class MapCreatorScript : MonoBehaviour
         StartMapsIdCreator();
         MapCreatorVoid();
         SpawnEnemies();
+        SpawnRandomChest();
     }
 
     public void StartMapsIdCreator()
@@ -831,7 +834,86 @@ public class MapCreatorScript : MonoBehaviour
 
         return enemiesList[enemiesList.Length - 1]._monsterCard;
     }
+
+    public void SpawnRandomChest()
+    {
+        // 1. Validar que existan beacons en el mapa
+        if (_allMovementOrbs == null || _allMovementOrbs.Count == 0)
+        {
+            Debug.LogWarning("No hay beacons (_allMovementOrbs) disponibles para generar cofres.");
+            return;
+        }
+
+        // Limpiamos la lista de cofres antes de generar nuevos
+        if (_allChestsPos == null)
+        {
+            _allChestsPos = new List<int>();
+        }
+        _allChestsPos.Clear();
+
+        // Define la cantidad de cofres que deseas generar desde la DungeonCard
+        int cantidadACrear = MainController.Instance._allDungeonCards[0]._totalRandomChests;
+
+        // 2. Recopilar únicamente los beacons válidos (que NO estén ya ocupados por enemigos en _allEnemiesPos)
+        List<int> beaconsDisponibles = new List<int>();
+
+        for (int i = 0; i < _allMovementOrbs.Count; i++)
+        {
+            // Verificamos que el beacon tenga el componente y NO esté ocupado por enemigos
+            bool esValido = _allMovementOrbs[i].GetComponent<BeaconScript>() != null &&
+                            !_allEnemiesPos.Contains(i);
+
+            if (esValido)
+            {
+                beaconsDisponibles.Add(i);
+            }
+        }
+
+        if (beaconsDisponibles.Count == 0)
+        {
+            Debug.LogWarning("No hay beacons disponibles para colocar cofres (todos están ocupados o no son válidos).");
+            return;
+        }
+
+        // Si hay menos beacons libres que los cofres que queremos crear, ajustamos el límite
+        if (cantidadACrear > beaconsDisponibles.Count)
+        {
+            cantidadACrear = beaconsDisponibles.Count;
+            Debug.LogWarning("Hay menos beacons libres que la cantidad de cofres solicitada. Se ajustará al total disponible.");
+        }
+
+        // 3. Seleccionar índices únicos de forma aleatoria sin repetir
+        HashSet<int> indicesCofres = new HashSet<int>();
+
+        while (indicesCofres.Count < cantidadACrear)
+        {
+            int randomValidIndex = Random.Range(0, beaconsDisponibles.Count);
+            int actualBeaconIndex = beaconsDisponibles[randomValidIndex];
+            indicesCofres.Add(actualBeaconIndex);
+        }
+
+        // 4. Agregar los índices seleccionados a _allChestsPos y ordenarlos
+        foreach (int index in indicesCofres)
+        {
+            if (!_allChestsPos.Contains(index))
+            {
+                _allChestsPos.Add(index);
+                var SetPos = _allMovementOrbs[index].transform.position;
+                GameObject Chest = Instantiate(MainController.Instance._scriptChest._chestPrefab,
+                    new Vector3(SetPos.x, SetPos.y + 0.2f, SetPos.z + 2),
+                   transform.rotation);
+                _chestObjects.Add(Chest);
+            }
+        }
+
+        _allChestsPos.Sort();
+
+        Debug.Log($"Se han generado {cantidadACrear} cofres en posiciones únicas dentro de _allChestsPos, sin repetirse con los enemigos.");
+
+
+    }
 }
+
 
     [System.Serializable]
 public class MapCell

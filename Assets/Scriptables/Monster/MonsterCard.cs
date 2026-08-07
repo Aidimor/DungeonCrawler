@@ -21,4 +21,14 @@ public class Monster : ScriptableObject
 
     }
     public Skills[] _skills;
+
+    [System.Serializable]
+    public class GiftCard
+    {
+        public CardsCard _card;
+        [Range(0f, 100f)]
+        public float _chace;
+
+    }
+    public GiftCard[] _giftCard;
 }
