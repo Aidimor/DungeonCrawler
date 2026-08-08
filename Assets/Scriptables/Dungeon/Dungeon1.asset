@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Dungeon1
   m_EditorClassIdentifier: Assembly-CSharp::DungeonCard
   _totalRandomCreations: 5
-  _totalEnemySpawns: 3
-  _totalRandomChests: 2
+  _totalEnemySpawns: 1
+  _totalRandomChests: 3
   _enemies:
   - _monsterCard: {fileID: 11400000, guid: 31bcd03d6c0afb942b841d32e84a1305, type: 2}
     _percentage: 10

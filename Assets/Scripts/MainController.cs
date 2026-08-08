@@ -13,6 +13,7 @@ public class MainController : MonoBehaviour
     public DeckCardController _scriptDeckController;
     public MonsterDatabase _scriptMonster;
     public ChestControllerScript _scriptChest;
+    public CardFusionControllerScript _scriptFusion;
 
     public Animator _cinematicAnimator;
     public GameObject _playerParent;
@@ -52,6 +53,7 @@ public class MainController : MonoBehaviour
         _scriptDeckController.StartDeckCreation();
         _scriptDeckController.ShuffleDeck();
         _scriptBattle.SetPlayerInfo(_scriptHero._heroScriptable[_heroID]);
+        _scriptFusion.SetCards();
     }
 
     void Update()
